@@ -1,0 +1,21 @@
+getwd()
+setwd("D:/R ex/Coursera files/")
+data <- read.table("household_power_consumption.txt",header=TRUE,sep=";",na.strings="?")
+str(data)
+data_with_dates <- data[data$Date %in% c("1/2/2007","2/2/2007"), ]
+install.packages("lubridate")
+library(lubridate)
+datatime <- paste(data_with_dates$Date, data_with_dates$Time)
+datatime_formatted <- parse_date_time(datatime,"dmy HMS")
+png("plot4.png",width=504,height=504)
+par(mfrow=c(2,2),mar=c(4,4,2,2),oma=c(0,0,0,0))
+final_graph2 <- plot(x=datatime_formatted,y=data_with_dates[,3],type="l",xlab="",ylab="Global Active Power(kilowatts)")
+plot(x=datatime_formatted,y=data_with_dates[,5],type="l",xlab="datetime",ylab="Voltage")
+plot(x=datatime_formatted,y=data_with_dates[,7],type="l",xlab="",ylab="Energy sub metering",cex=0.5)
+{
+lines(x=datatime_formatted,y=data_with_dates[,8],type="l",col="red")
+lines(x=datatime_formatted,y=data_with_dates[,9],type="l",col="blue")
+legend("topright",legend=c("Sub_metering_1","Sub_metering_2","Sub_metering_3"),lty=1,col=c("black","red","blue"))
+}
+plot(x=datatime_formatted,y=data_with_dates[,4],type="l",xlab="datetime",ylab="Global_reactive_power")
+dev.off()
